@@ -129,158 +129,292 @@ function Sticker({ children, rotate = 4, bg = '#fff', shadow = '#04294e', style 
   );
 }
 
+// ------- mobile detection
+function useIsMobile(bp = 768) {
+  const [m, setM] = React.useState(() => window.innerWidth < bp);
+  React.useEffect(() => {
+    const h = () => setM(window.innerWidth < bp);
+    window.addEventListener('resize', h);
+    return () => window.removeEventListener('resize', h);
+  }, [bp]);
+  return m;
+}
+
+const MobileCtx = React.createContext(false);
+function useMobile() { return React.useContext(MobileCtx); }
+
 // ------- shell
 function Shell({ children, page, setPage, fonts, yellow = '#FFD140' }) {
   const navy = '#04294e';
+  const mobile = useIsMobile();
+  const [menuOpen, setMenuOpen] = React.useState(false);
+
+  // Close menu whenever the page changes
+  React.useEffect(() => { setMenuOpen(false); }, [page]);
+
   return (
-    <div
-      style={{
-        fontFamily: fonts.body,
-        color: navy,
-        background: 'var(--bg)',
-        minHeight: '100vh',
-        position: 'relative',
-      }}
-    >
-      <header
+    <MobileCtx.Provider value={mobile}>
+      <div
         style={{
-          padding: '24px 48px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderBottom: `2px solid ${navy}`,
-          position: 'sticky',
-          top: 0,
+          fontFamily: fonts.body,
+          color: navy,
           background: 'var(--bg)',
-          zIndex: 50,
+          minHeight: '100vh',
+          position: 'relative',
         }}
       >
-        <button
-          onClick={() => setPage('home')}
+        {/* ---- HEADER ---- */}
+        <header
           style={{
-            all: 'unset',
-            cursor: 'pointer',
+            padding: mobile ? '14px 20px' : '24px 48px',
             display: 'flex',
             alignItems: 'center',
-            gap: 14,
+            justifyContent: 'space-between',
+            borderBottom: `2px solid ${navy}`,
+            position: 'sticky',
+            top: 0,
+            background: 'var(--bg)',
+            zIndex: 50,
           }}
         >
-          <span
+          {/* Logo */}
+          <button
+            onClick={() => setPage('home')}
             style={{
-              width: 52,
-              height: 52,
-              background: yellow,
-              border: `2.5px solid ${navy}`,
-              transform: 'rotate(-6deg)',
-              display: 'grid',
-              placeItems: 'center',
-              fontFamily: fonts.head,
-              fontWeight: 900,
-              fontSize: 30,
-              lineHeight: 1,
-              boxShadow: `4px 4px 0 ${navy}`,
+              all: 'unset',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
             }}
           >
-            β
-          </span>
-          <span style={{ fontFamily: fonts.head, fontWeight: 900, fontSize: 22, letterSpacing: '-.02em', textTransform: 'uppercase' }}>
-            JTH Beta Club
-          </span>
-        </button>
-        <nav style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-          {NAV.map((n) => (
+            <span
+              style={{
+                width: mobile ? 40 : 52,
+                height: mobile ? 40 : 52,
+                background: yellow,
+                border: `2.5px solid ${navy}`,
+                transform: 'rotate(-6deg)',
+                display: 'grid',
+                placeItems: 'center',
+                fontFamily: fonts.head,
+                fontWeight: 900,
+                fontSize: mobile ? 22 : 30,
+                lineHeight: 1,
+                boxShadow: `4px 4px 0 ${navy}`,
+                flexShrink: 0,
+              }}
+            >
+              β
+            </span>
+            <span style={{
+              fontFamily: fonts.head,
+              fontWeight: 900,
+              fontSize: mobile ? 16 : 22,
+              letterSpacing: '-.02em',
+              textTransform: 'uppercase',
+            }}>
+              JTH Beta Club
+            </span>
+          </button>
+
+          {/* Desktop nav */}
+          {!mobile && (
+            <nav style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+              {NAV.map((n) => (
+                <button
+                  key={n.id}
+                  onClick={() => setPage(n.id)}
+                  style={{
+                    all: 'unset',
+                    cursor: 'pointer',
+                    padding: '10px 14px',
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: navy,
+                    textTransform: 'uppercase',
+                    letterSpacing: '.02em',
+                    position: 'relative',
+                  }}
+                >
+                  {page === n.id && (
+                    <span
+                      aria-hidden
+                      style={{
+                        position: 'absolute',
+                        inset: '6px -2px',
+                        background: yellow,
+                        zIndex: -1,
+                        transform: 'rotate(-1.5deg)',
+                      }}
+                    />
+                  )}
+                  {n.label}
+                </button>
+              ))}
+            </nav>
+          )}
+
+          {/* Mobile hamburger */}
+          {mobile && (
             <button
-              key={n.id}
-              onClick={() => setPage(n.id)}
+              onClick={() => setMenuOpen((o) => !o)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               style={{
                 all: 'unset',
                 cursor: 'pointer',
-                padding: '10px 14px',
-                fontSize: 14,
-                fontWeight: 700,
-                color: navy,
-                textTransform: 'uppercase',
-                letterSpacing: '.02em',
-                position: 'relative',
+                width: 44,
+                height: 44,
+                background: menuOpen ? navy : yellow,
+                border: `2.5px solid ${navy}`,
+                display: 'grid',
+                placeItems: 'center',
+                fontSize: 24,
+                fontWeight: 900,
+                color: menuOpen ? yellow : navy,
+                boxShadow: `3px 3px 0 ${navy}`,
+                flexShrink: 0,
+                lineHeight: 1,
               }}
             >
-              {page === n.id && (
-                <span
-                  aria-hidden
-                  style={{
-                    position: 'absolute',
-                    inset: '6px -2px',
-                    background: yellow,
-                    zIndex: -1,
-                    transform: 'rotate(-1.5deg)',
-                  }}
-                />
-              )}
-              {n.label}
+              {menuOpen ? '✕' : '☰'}
             </button>
-          ))}
-        </nav>
-      </header>
+          )}
+        </header>
 
-      {children}
-
-      <footer
-        style={{
-          marginTop: 96,
-          background: navy,
-          color: '#fff',
-          padding: '56px 48px 32px',
-        }}
-      >
-        <div style={{
-          fontFamily: fonts.head, fontWeight: 900, fontSize: 'clamp(64px, 12vw, 140px)', lineHeight: 1.0,
-          color: yellow, letterSpacing: '-.04em',
-          margin: '0 0 48px',
-          textTransform: 'uppercase',
-        }}>
-          Beta is Service.
-        </div>
-        <div style={{ fontSize: 14, fontStyle: 'italic', color: 'rgba(255,255,255,.7)', marginBottom: 36, maxWidth: 480 }}>
-          “Let Us Lead by Serving Others.” — Our motto.
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32, borderTop: '1px solid rgba(255,255,255,.18)', paddingTop: 32 }}>
-          <div>
-            <div style={{ fontFamily: fonts.head, fontWeight: 900, fontSize: 16, textTransform: 'uppercase', marginBottom: 10 }}>JTH Beta Club</div>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,.7)', lineHeight: 1.55, margin: 0, maxWidth: 240 }}>
-              The largest student-led organization at John T. Hoggard High School. Chartered 1991.
-            </p>
-          </div>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', color: yellow, marginBottom: 10 }}>Pages</div>
-            {NAV.slice(0, 3).map((n) => (
-              <button key={n.id} onClick={() => setPage(n.id)} style={{ all: 'unset', display: 'block', cursor: 'pointer', fontSize: 13, padding: '3px 0', color: 'rgba(255,255,255,.85)' }}>{n.label}</button>
+        {/* Mobile full-screen nav overlay — sits below header (z-index 45) */}
+        {mobile && menuOpen && (
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: navy,
+              zIndex: 45,
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '88px 28px 40px',
+              overflowY: 'auto',
+            }}
+          >
+            {NAV.map((n, i) => (
+              <button
+                key={n.id}
+                onClick={() => { setPage(n.id); setMenuOpen(false); }}
+                style={{
+                  all: 'unset',
+                  cursor: 'pointer',
+                  fontFamily: fonts.head,
+                  fontWeight: 900,
+                  fontSize: 'clamp(28px, 8vw, 44px)',
+                  textTransform: 'uppercase',
+                  color: page === n.id ? yellow : '#fff',
+                  letterSpacing: '-.025em',
+                  padding: '16px 0',
+                  borderBottom: i < NAV.length - 1 ? '1px solid rgba(255,255,255,.15)' : 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                {n.label}
+                {page === n.id && <span style={{ color: yellow, fontSize: 18 }}>★</span>}
+              </button>
             ))}
-          </div>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', color: yellow, marginBottom: 10 }}>More</div>
-            {NAV.slice(3).map((n) => (
-              <button key={n.id} onClick={() => setPage(n.id)} style={{ all: 'unset', display: 'block', cursor: 'pointer', fontSize: 13, padding: '3px 0', color: 'rgba(255,255,255,.85)' }}>{n.label}</button>
-            ))}
-          </div>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', color: yellow, marginBottom: 10 }}>Find us</div>
-            <div style={{ fontSize: 13, lineHeight: 1.7, color: 'rgba(255,255,255,.85)' }}>
-              Hoggard High School<br/>
-              4305 Shipyard Blvd<br/>
-              Wilmington, NC 28403
+            <div style={{ marginTop: 'auto', paddingTop: 32, fontSize: 13, color: 'rgba(255,255,255,.4)', fontStyle: 'italic' }}>
+              "Let Us Lead by Serving Others."
             </div>
           </div>
-        </div>
-        <div style={{ marginTop: 32, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,.12)', display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'rgba(255,255,255,.5)' }}>
-          <span>© {new Date().getFullYear()} JTH Beta Club · National Beta Chapter</span>
-          <span>Site by Beta officers</span>
-        </div>
-      </footer>
-    </div>
+        )}
+
+        {children}
+
+        {/* ---- FOOTER ---- */}
+        <footer
+          style={{
+            marginTop: mobile ? 64 : 96,
+            background: navy,
+            color: '#fff',
+            padding: mobile ? '40px 20px 24px' : '56px 48px 32px',
+          }}
+        >
+          <div style={{
+            fontFamily: fonts.head,
+            fontWeight: 900,
+            fontSize: 'clamp(48px, 12vw, 140px)',
+            lineHeight: 1.0,
+            color: yellow,
+            letterSpacing: '-.04em',
+            margin: '0 0 48px',
+            textTransform: 'uppercase',
+          }}>
+            Beta is Service.
+          </div>
+          <div style={{
+            fontSize: 14,
+            fontStyle: 'italic',
+            color: 'rgba(255,255,255,.7)',
+            marginBottom: 36,
+            maxWidth: 480,
+          }}>
+            "Let Us Lead by Serving Others." — Our motto.
+          </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: mobile ? '1fr 1fr' : 'repeat(4, 1fr)',
+            gap: mobile ? 20 : 32,
+            borderTop: '1px solid rgba(255,255,255,.18)',
+            paddingTop: 32,
+          }}>
+            {/* Blurb spans full width on mobile */}
+            <div style={{ gridColumn: mobile ? 'span 2' : 'span 1' }}>
+              <div style={{ fontFamily: fonts.head, fontWeight: 900, fontSize: 16, textTransform: 'uppercase', marginBottom: 10 }}>JTH Beta Club</div>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,.7)', lineHeight: 1.55, margin: 0, maxWidth: 280 }}>
+                The largest student-led organization at John T. Hoggard High School. Chartered 1991.
+              </p>
+            </div>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', color: yellow, marginBottom: 10 }}>Pages</div>
+              {NAV.slice(0, 3).map((n) => (
+                <button key={n.id} onClick={() => setPage(n.id)} style={{ all: 'unset', display: 'block', cursor: 'pointer', fontSize: 13, padding: '3px 0', color: 'rgba(255,255,255,.85)' }}>{n.label}</button>
+              ))}
+            </div>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', color: yellow, marginBottom: 10 }}>More</div>
+              {NAV.slice(3).map((n) => (
+                <button key={n.id} onClick={() => setPage(n.id)} style={{ all: 'unset', display: 'block', cursor: 'pointer', fontSize: 13, padding: '3px 0', color: 'rgba(255,255,255,.85)' }}>{n.label}</button>
+              ))}
+            </div>
+            {/* Address spans full width on mobile */}
+            <div style={{ gridColumn: mobile ? 'span 2' : 'span 1' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', color: yellow, marginBottom: 10 }}>Find us</div>
+              <div style={{ fontSize: 13, lineHeight: 1.7, color: 'rgba(255,255,255,.85)' }}>
+                Hoggard High School<br/>
+                4305 Shipyard Blvd<br/>
+                Wilmington, NC 28403
+              </div>
+            </div>
+          </div>
+          <div style={{
+            marginTop: 32,
+            paddingTop: 20,
+            borderTop: '1px solid rgba(255,255,255,.12)',
+            display: 'flex',
+            flexDirection: mobile ? 'column' : 'row',
+            gap: mobile ? 6 : 0,
+            justifyContent: 'space-between',
+            fontSize: 12,
+            color: 'rgba(255,255,255,.5)',
+          }}>
+            <span>© {new Date().getFullYear()} JTH Beta Club · National Beta Chapter</span>
+            <span>Site by Beta officers</span>
+          </div>
+        </footer>
+      </div>
+    </MobileCtx.Provider>
   );
 }
 
 Object.assign(window, {
   NAV, STATS, PILLARS, ADVISORS, INFO_TILES, UPCOMING_EVENTS,
-  PhotoSlot, MarkerHighlight, Sticker, Shell,
+  PhotoSlot, MarkerHighlight, Sticker, Shell, useMobile,
 });
