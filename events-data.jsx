@@ -1,11 +1,11 @@
 // events-data.jsx ? Auto-generated. Do not edit manually.
-// Last updated: 5/29/2026, 12:08:39 PM ET
+// Last updated: 5/29/2026, 12:33:48 PM ET
 
 const UPCOMING_EVENTS = [
   {
     "title": "Wilmington Municipal Golf Course Athletic Event",
-    "day": "16",
-    "mo": "MAY",
+    "day": "24",
+    "mo": "JAN",
     "detail": "This event is celebrating the history of Wilmington athletics!",
     "spots": "8",
     "url": "https://www.signupgenius.com/go/4090449ADA928A5FC1-64077165-wilmington#/",
@@ -35,7 +35,14 @@ const UPCOMING_EVENTS = [
 ];
 
 const RECURRING_EVENTS = [
-  // example shape: { title, dates, detail, spots, url, url2 }
+  {
+    "title": "Healthy Kids Running Series",
+    "dates": "4/12, 4/19, 4/26, 5/03,  5/10, 5/24",
+    "detail": "run",
+    "spots": "20",
+    "url": "apple.com",
+    "url2": "target.com"
+  }
 ];
 
 Object.assign(window, { UPCOMING_EVENTS, RECURRING_EVENTS });
