@@ -45,7 +45,7 @@ function HomePage({ fonts, setPage }) {
             </p>
           </div>
 
-          {/* CTA SQUARE + STICKER */}
+          {/* CTA RECTANGLE + STICKER */}
           <div style={{ position: 'relative', paddingTop: mobile ? 20 : 28 }}>
             <Sticker rotate={4} shadow={navy} style={{ position: 'absolute', top: -8, right: mobile ? 0 : -8, maxWidth: mobile ? 190 : 240, zIndex: 2 }}>
               <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: navy, marginBottom: 4, letterSpacing: '.06em' }}>✦ Up next</div>
@@ -54,45 +54,40 @@ function HomePage({ fonts, setPage }) {
             <div style={{
               background: yellow, border: `2.5px solid ${navy}`,
               boxShadow: `10px 10px 0 ${navy}`,
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-              gap: 16, padding: mobile ? 28 : 32, textAlign: 'center',
-              ...(mobile ? {} : { aspectRatio: '1 / 1' }),
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              textAlign: 'center',
             }}>
-              <div style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', color: navy }}>Ready to volunteer?</div>
-              <div style={{ fontFamily: fonts.head, fontWeight: 900, fontSize: 'clamp(32px, 5vw, 56px)', lineHeight: .9, letterSpacing: '-.03em', textTransform: 'uppercase', color: navy }}>
-                Sign up<br/>for an event.
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: mobile ? 28 : 32 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', color: navy }}>Ready to volunteer?</div>
+                <div style={{ fontFamily: fonts.head, fontWeight: 900, fontSize: 'clamp(32px, 5vw, 56px)', lineHeight: .9, letterSpacing: '-.03em', textTransform: 'uppercase', color: navy }}>
+                  Sign up<br/>for an event.
+                </div>
+                <button onClick={() => setPage('signup')} style={{
+                  all: 'unset', cursor: 'pointer',
+                  background: navy, color: yellow,
+                  padding: mobile ? '14px 24px' : '18px 32px',
+                  fontFamily: fonts.head, fontWeight: 900, fontSize: mobile ? 15 : 18,
+                  textTransform: 'uppercase', letterSpacing: '.02em',
+                  border: `2.5px solid ${navy}`, boxShadow: `5px 5px 0 #fff`, marginTop: 8,
+                }}>
+                  Event sign up →
+                </button>
               </div>
-              <button onClick={() => setPage('signup')} style={{
-                all: 'unset', cursor: 'pointer',
-                background: navy, color: yellow,
-                padding: mobile ? '14px 24px' : '18px 32px',
-                fontFamily: fonts.head, fontWeight: 900, fontSize: mobile ? 15 : 18,
-                textTransform: 'uppercase', letterSpacing: '.02em',
-                border: `2.5px solid ${navy}`, boxShadow: `5px 5px 0 #fff`, marginTop: 8,
-              }}>
-                Event sign up →
-              </button>
+              <div style={{ width: '100%', borderTop: `2.5px solid ${navy}`, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+                {STATS.map((s, i) => (
+                  <div key={i} style={{ padding: mobile ? '18px 12px' : '24px 16px', borderRight: i < STATS.length - 1 ? `2px solid ${navy}` : 'none' }}>
+                    <div style={{ fontFamily: fonts.head, fontWeight: 900, fontSize: mobile ? 'clamp(22px, 6vw, 32px)' : 'clamp(24px, 3vw, 36px)', lineHeight: 1, letterSpacing: '-.04em', color: navy }}>
+                      <CountUp to={s.value} prefix={s.prefix} suffix={s.suffix} />
+                    </div>
+                    <div style={{ fontSize: 11, marginTop: 6, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.04em', color: navy, opacity: .75 }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* STATS */}
-      <section style={{ background: yellow, borderBottom: `2px solid ${navy}` }}>
-        <div style={{ display: 'grid', gridTemplateColumns: mobile ? 'repeat(3, 1fr)' : 'repeat(3, 1fr)' }}>
-          {STATS.map((s, i) => (
-            <div key={i} style={{
-              padding: mobile ? '24px 16px' : '40px 32px',
-              borderRight: i === STATS.length - 1 ? 'none' : `2px solid ${navy}`,
-            }}>
-              <div style={{ fontFamily: fonts.head, fontWeight: 900, fontSize: mobile ? 'clamp(32px, 8vw, 52px)' : 'clamp(48px, 6vw, 80px)', lineHeight: 1, letterSpacing: '-.04em', color: navy }}>
-                <CountUp to={s.value} prefix={s.prefix} suffix={s.suffix} />
-              </div>
-              <div style={{ fontSize: 12, marginTop: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.04em', color: navy }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* FEATURED EVENT */}
       <section style={{ padding: mobile ? '48px 20px' : '88px 48px', borderBottom: `2px solid ${navy}` }}>
