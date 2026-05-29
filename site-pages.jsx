@@ -275,16 +275,22 @@ function SignupPage({ fonts }) {
               </div>
               <div style={{ fontSize: 14, color: navy, opacity: .8, fontWeight: 500 }}>{e.detail}</div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: mobile ? 'space-between' : undefined, gap: 16 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: navy, textAlign: 'right' }}>
-                <div>{e.spots}</div>
-                <div style={{ fontSize: 11, opacity: .7, textTransform: 'uppercase', letterSpacing: '.04em' }}>Signed up</div>
-              </div>
-              {e.url ? (
-                <a href={e.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'inline-block', background: navy, color: yellow, padding: '12px 22px', fontFamily: fonts.head, fontWeight: 900, fontSize: 14, textTransform: 'uppercase', boxShadow: `3px 3px 0 ${yellow}` }}>Sign up →</a>
-              ) : (
-                <span style={{ display: 'inline-block', background: 'rgba(4,41,78,.15)', color: 'rgba(4,41,78,.4)', padding: '12px 22px', fontFamily: fonts.head, fontWeight: 900, fontSize: 14, textTransform: 'uppercase' }}>Sign up →</span>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: mobile ? 'flex-start' : 'flex-end', gap: 8 }}>
+              {e.spots && (
+                <div style={{ fontSize: 13, fontWeight: 700, color: navy, textAlign: mobile ? 'left' : 'right' }}>
+                  {e.spots} <span style={{ fontSize: 11, opacity: .7, textTransform: 'uppercase', letterSpacing: '.04em' }}>Slots</span>
+                </div>
               )}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: mobile ? 'flex-start' : 'flex-end' }}>
+                {e.url ? (
+                  <a href={e.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'inline-block', background: navy, color: yellow, padding: '12px 22px', fontFamily: fonts.head, fontWeight: 900, fontSize: 14, textTransform: 'uppercase', boxShadow: `3px 3px 0 ${yellow}`, whiteSpace: 'nowrap' }}>Sign up here first →</a>
+                ) : !e.url2 ? (
+                  <span style={{ display: 'inline-block', background: 'rgba(4,41,78,.15)', color: 'rgba(4,41,78,.4)', padding: '12px 22px', fontFamily: fonts.head, fontWeight: 900, fontSize: 14, textTransform: 'uppercase' }}>Sign up →</span>
+                ) : null}
+                {e.url2 && (
+                  <a href={e.url2} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'inline-block', background: yellow, color: navy, padding: '10px 22px', fontFamily: fonts.head, fontWeight: 900, fontSize: 13, textTransform: 'uppercase', border: `2px solid ${navy}`, boxShadow: `3px 3px 0 ${navy}`, whiteSpace: 'nowrap' }}>Also register →</a>
+                )}
+              </div>
             </div>
           </div>
         ))}
