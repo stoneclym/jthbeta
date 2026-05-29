@@ -1,24 +1,15 @@
-// events-data.jsx — Auto-generated from Google Sheets. Do not edit manually.
-// Last updated: 5/29/2026, 12:00:30 AM ET
+// events-data.jsx ? Auto-generated. Do not edit manually.
+// Last updated: 5/29/2026, 12:13:49 AM ET
 
 const UPCOMING_EVENTS = [
   {
-    "title": "Test Event",
-    "day": "5",
-    "mo": "DEC",
-    "detail": "Testing to see if Claude knows what it's doing",
-    "spots": "2",
-    "url": "https://www.apple.com/",
-    "url2": ""
-  },
-  {
-    "title": "Donation Drive",
-    "day": "21",
-    "mo": "JUN",
-    "detail": "Donation for chocolate chip cookies.",
-    "spots": "100",
-    "url": "https://www.target.com/",
-    "url2": ""
+    "title": "Holly Tree Dance",
+    "day": "31",
+    "mo": "MAY",
+    "detail": "Join Holly Tree Elementary for their school dance!",
+    "spots": "10",
+    "url": "https://www.signupgenius.com/go/4090449ADA928A5FC1-63999879-holly#/",
+    "url2": "https://www.signupgenius.com/go/904054BAFAD28A1F94-63997107-beta#/"
   }
 ];
 
