@@ -34,4 +34,6 @@ const UPCOMING_EVENTS = [
   }
 ];
 
-Object.assign(window, { UPCOMING_EVENTS });
+const RECURRING_EVENTS = [];
+
+Object.assign(window, { UPCOMING_EVENTS, RECURRING_EVENTS });
