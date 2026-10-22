@@ -8,6 +8,7 @@ const NAV = [
   { id: 'signup', label: 'Event Sign Up' },
   { id: 'volunteers', label: 'Request Volunteers' },
   { id: 'info', label: 'Info' },
+  { id: 'betacon', label: 'Beta Con' },
   { id: 'contact', label: 'Contact' },
 ];
 
